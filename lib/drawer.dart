@@ -19,7 +19,7 @@ class MyDrawer extends StatelessWidget {
         ListTile(
             title: Text("Email"),
             leading: Icon(Icons.email),
-            subtitle: Text("syam@gmail.com"),
+            subtitle: Text("shyam@gmail.com"),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {
               ShowToast();

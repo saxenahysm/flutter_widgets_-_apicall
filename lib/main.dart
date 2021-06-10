@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'drawer.dart';
+
 void main() {
   runApp(MaterialApp(
     title: "StateFull Widgets",
@@ -40,46 +42,22 @@ class _FavoriteCity extends State<FavoriteCity> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: data!=null?
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              child: Column(
-                children: [
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        labelText: "User Name",
-                        hintText: "Enter User Name",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0))),
-                  ),
-                  SizedBox(height: 12.0),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        labelText: "Password",
-                        hintText: "Enter Password",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0))),
-                  ),
-                  Container(
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(color: Colors.white, fontSize: 16.0),
-                    ),
-                    height: 48.0,
-                    width: 120,
-                    color: Colors.lightBlue,
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(top: 12.0),
-                  )
-                ],
+        child: data != null
+            ? ListView.builder(
+            itemBuilder:
+            (context, index){
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(data[index]["title"]),
+                  subtitle: Text("Id ${data[index]["id"]}"),
+                  leading: Image.network(data[index]["url"]),
+                ),
+              );
+            })
+            : Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-          ),
-        ):Center(child: CircularProgressIndicator(),),
       ),
       drawer: MyDrawer(),
     );
@@ -95,7 +73,9 @@ class _FavoriteCity extends State<FavoriteCity> {
   }
 
   void getData() async {
-    var res=await http.get(url);
+    var res = await http.get(Uri.parse(url));
     print(res.body);
+    data = jsonDecode(res.body);
+    setState(() {});
   }
 }
