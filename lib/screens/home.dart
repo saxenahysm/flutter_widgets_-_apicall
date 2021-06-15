@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_widgets/Utils/constants.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'drawer.dart';
 
@@ -14,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String cityName = "";
   var url = "https://jsonplaceholder.typicode.com/photos";
   var data;
+  var filteredData;
 
   @override
   void initState() {
@@ -32,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Constants.prefs.setBool("LoggedIn", false);
                 Navigator.pushReplacementNamed(context, "/login");
               },
-              icon: Icon(Icons.logout))
+              icon: Icon(Icons.logout)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.search))
         ],
         title: Text("Widgets and http call"),
       ),
@@ -79,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var res = await http.get(Uri.parse(url));
     print(res.body);
     data = jsonDecode(res.body);
+    filteredData = data;
     setState(() {});
   }
 }
